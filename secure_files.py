@@ -1,15 +1,19 @@
+# secure_files.py
+
+
 import datetime
 import logging
 import os
 import time
 
-from watchdog.events import FileSystemEventHandler, LoggingEventHandler
+from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 import monitor_mail
 
 
 class FileMonitor:
+
     def __init__(self,folderPath:str,filePaths:list=os.listdir(os.getcwd())):
 
         # Configuring Path and Credentials
@@ -31,26 +35,32 @@ class FileMonitor:
          
 
     def run(self):
-        
+
         print("Monitoring Started")
         self.observer.start()
         programStopped=False
 
         while programStopped==False:
             try:
+
+                # Running an infinite loop to track changes every 5 seconds
                 while True:
                     time.sleep(5)
                     print("No Change Detected")
 
 
             except KeyboardInterrupt:
+
+                # If user presses (Ctrl + C) Monitoring is Terminated
                 print("Monitoring Terminated")
                 programStopped=True
                 self.observer.stop()
+
             self.observer.join()
 
+    
     def on_created(self,event):
-
+        
         timestamp=datetime.datetime.now().strftime("%d-%m-%Y  %H:%M:%S")
         print(f"{timestamp} - File {event.event_type.title()} : {event.src_path}")
         
@@ -63,6 +73,7 @@ class FileMonitor:
             monitor_mail.sendMail(self.emailID, self.password, "vishal.bshenoy@gmail.com", event)
 
     def on_deleted(self,event):
+
         timestamp=datetime.datetime.now().strftime("%d-%m-%Y  %H:%M:%S")
         print(f"{timestamp} - File {event.event_type.title()} : {event.src_path}")
 
