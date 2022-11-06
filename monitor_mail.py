@@ -1,3 +1,6 @@
+# monitor_mail.py
+# Contains function which helps the file monitor to notify you through mail
+
 import smtplib
 import pickle
 from email.message import EmailMessage
