@@ -74,4 +74,5 @@ def loadConfig():
     except FileNotFoundError:
         data=getConfigData()
         createConfig(data)
+        return data
 
