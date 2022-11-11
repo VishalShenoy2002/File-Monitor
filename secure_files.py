@@ -1,25 +1,31 @@
 # secure_files.py
-
+# File Monitor which detects change in the file system
 
 import datetime
 import logging
 import os
+import json
 import time
 
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
 import monitor_mail
+import utilities
 
 
 class FileMonitor:
 
-    def __init__(self,folderPath:str,filePaths:list=os.listdir(os.getcwd())):
+    def __init__(self,folderPath:str,filePaths:list=os.listdir(os.getcwd()),configFile:str="config.json"):
 
         # Configuring Path and Credentials
         self.folderPath=folderPath
         self.filePaths=filePaths
         self.emailID,self.password=monitor_mail.getCred()
+
+        with open("config.json","r") as f:
+            self.configData=json.load(f)
+            f.close()
 
         # Initializing a Detector and Observer
         self.detector=FileSystemEventHandler()
@@ -34,9 +40,9 @@ class FileMonitor:
         self.observer.schedule(self.detector, self.folderPath,recursive=True)
          
 
-    def run(self):
+    def run(self,interval:int):
 
-        print("Monitoring Started")
+        utilities.displayMessage("Monitoring Started")
         self.observer.start()
         programStopped=False
 
@@ -45,14 +51,14 @@ class FileMonitor:
 
                 # Running an infinite loop to track changes every 5 seconds
                 while True:
-                    time.sleep(5)
-                    print("No Change Detected")
+                    time.sleep(interval)
+                    utilities.displayMessage("No Change Detected",style=2)
 
 
             except KeyboardInterrupt:
 
                 # If user presses (Ctrl + C) Monitoring is Terminated
-                print("Monitoring Terminated")
+                utilities.displayMessage("Monitoring Terminated")
                 programStopped=True
                 self.observer.stop()
 
@@ -70,7 +76,7 @@ class FileMonitor:
         print(f"{timestamp} - File {event.event_type.title()} : {event.src_path}")
         
         if event.event_type=="modified" and (event.src_path in self.filePaths or event.src_path.split(os.sep)[-1] in self.filePaths):
-            monitor_mail.sendMail(self.emailID, self.password, "vishal.bshenoy@gmail.com", event)
+            monitor_mail.sendMail(self.emailID, self.password, self.configData["email"], event)
 
     def on_deleted(self,event):
 
@@ -78,10 +84,6 @@ class FileMonitor:
         print(f"{timestamp} - File {event.event_type.title()} : {event.src_path}")
 
         if event.event_type=="deleted" and (event.src_path in self.filePaths or event.src_path.split(os.sep)[-1] in self.filePaths):
-            monitor_mail.sendMail(self.emailID, self.password, "vishal.bshenoy@gmail.com", event)
+            monitor_mail.sendMail(self.emailID, self.password, self.configData["email"], event)
 
-
-if __name__=="__main__":
-    app=FileMonitor()
-    app.run()
     
