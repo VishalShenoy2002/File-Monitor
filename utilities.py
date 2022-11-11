@@ -33,10 +33,12 @@ def getConfigData():
     displayMessage("Running Configuration as config file is not present. Please Enter the required details :")
     print("\n")
 
-    data={"name":"","path":"","interval":1,"files_to_track":[]}
+    data={"name":"","path":"","email":"","interval":1,"files_to_track":[]}
 
-    data["name"]=input("Enter Your Name: ")
+    data["name"]=input("Enter your Name: ")
     data["path"]=input("Enter the folder path you want to track: ")
+    data["email"]=input("Enter your email id: ")
+
     data["interval"]=int(input("Enter the frequency of tracking (in seconds) : "))
 
     files_in_directory=os.listdir(data["path"])
@@ -48,9 +50,9 @@ def getConfigData():
 
     for index in fileIndicies:
         data["files_to_track"].append(files_in_directory[index])
-    
+
     print("\n")
-    displayMessage("Running Configuration as config file is not present. Please Enter the required details :")
+    displayMessage("Configuration Complited Successfully")
     print("\n")
     
     return data
