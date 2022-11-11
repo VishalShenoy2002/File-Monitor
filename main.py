@@ -8,7 +8,6 @@ print(logo)
 
 # Loading Configuration
 config=loadConfig()
-print(config['name'])
 name=config['name']
 path=config['path']
 email=config['email']
