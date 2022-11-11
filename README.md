@@ -30,7 +30,7 @@ If there are any *ImportErrors* try running the following command:
 pip install requirements.txt
 ```
 
-## Images
+## Image
 ![Image of File Monitor](https://user-images.githubusercontent.com/61897464/201341764-90777194-7cb3-49a8-9d4f-603940d816cb.png)
 
 
