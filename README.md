@@ -11,9 +11,13 @@ The configuration file i.e config.json has 5 keys
 name,path,email,interval,files_to_track
 ```
 **name**: This parameter is the name of the user
+
 **path**: This parameter is the path the user wants to track
+
 **email**: This parameter is the email of the user 
+
 **interval**: This parameter is the time interval that the monitor will use to check 
+
 **files_to_track**: This parameter will contain the files the user wants to track in the directory.
 
 ## How to Start Using the Monitor (Setup) ?
